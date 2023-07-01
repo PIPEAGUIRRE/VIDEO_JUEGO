@@ -1,0 +1,53 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+#inicio, #juego, #personaje  {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+#botonesDefensa {
+  display: none;
+}
+
+.ataqueButton,
+.defensaButton {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  width: 15%;
+}
+
+#creditos {
+  margin-top: 20px;
+  text-align: center;
+}
+ #enemigo {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.ataqueButton, .defensaButton {
+  display: none;
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+#mensaje {
+  margin-top: 40px;
+  font-weight: bold;
+}
+
+.vida {
+  font-weight: bold;
+}

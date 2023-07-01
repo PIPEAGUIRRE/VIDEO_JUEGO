@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Videojuego</title>
+  <link rel="stylesheet" type="text/css" href="juego2.css">
+</head>
+<body>
+  <!-- Bloque de inicio -->
+  <div id="inicio">
+    <h1>Videojuego</h1>
+    <a href="#" onclick="iniciarJuego()">
+      <img src="empezo-el-juego.gif" alt="Iniciar juego">
+  </a>
+    <div id="creditos">
+      <p>Desarrollado por: Andres Aguirre</p>
+      <p>Programa: ADSO_A</p>
+      <p>Número de ficha: 2613934</p>
+    </div>
+  </div>
+
+  <!-- Bloque de juego -->
+  <div id="juego" style="display: none;">
+    <h1>Juego</h1>
+    <div id="personaje">
+      <h2>Personaje Principal</h2>
+      <div id="botonesAtaque" style="display: block;">
+        <img class="ataqueButton" src="Agua.gif" alt="" onclick="atacar('agua')"></img>
+        <img class="ataqueButton" src="Fuego.gif" alt="" onclick="atacar('fuego')"></img>
+        <img class="ataqueButton" src="Rayo.gif" alt="" onclick="atacar('rayo')"></img>
+      </div>
+      <h3>ATAQUE</h3>
+      <h3 style="display: none;">ESCUDO</h3> 
+      <p id="vidaPersonaje">Vida: 100</p>
+    </div>
+
+    <div id="botonesDefensa" >
+        <div id="enemigo">
+          <h2>Enemigo</h2>
+        <img class="defensaButton" src="Agua.gif" alt="" onclick="defender('escudoAgua')"></img>
+        <img class="defensaButton" src="Fuego.gif" alt="" onclick="defender('escudoFuego')"></img>
+        <img class="defensaButton" src="Rayo.gif" alt="" onclick="defender('escudoRayo')"></img>
+      </div>
+      <h3>ESCUDO</h3>
+      <h3 style="display: none;">ATAQUE</h3>
+      <p id="vidaEnemigo">Vida: 100</p>
+    </div>
+
+    <div id="mensaje"></div>
+  </div>
+
+  <script>
+    // Código JavaScript aquí
+
+    // Variables de vida del personaje y enemigo
+    var vidaPersonaje = 100;
+    var vidaEnemigo = 100;
+
+    function iniciarJuego() {
+      // Ocultar bloque de inicio y mostrar bloque de juego
+      document.getElementById("inicio").style.display = "none";
+      document.getElementById("juego").style.display = "block";
+      turnoPersonaje();
+    }
+
+    function turnoPersonaje() {
+      // Mostrar botones de ataque del personaje y ocultar botones de defensa del enemigo
+      document.getElementsByClassName("ataqueButton")[0].style.display = "inline-block";
+      document.getElementsByClassName("ataqueButton")[1].style.display = "inline-block";
+      document.getElementsByClassName("ataqueButton")[2].style.display = "inline-block";
+      document.getElementById("personaje").style.display = "inline-block";
+      document.getElementById("botonesDefensa").style.display = "none";
+      document.getElementsByClassName("defensaButton")[0].style.display = "none";
+      document.getElementsByClassName("defensaButton")[1].style.display = "none";
+      document.getElementsByClassName("defensaButton")[2].style.display = "none";
+    }
+
+    function turnoEnemigo() {
+      // Mostrar botones de defensa del enemigo y ocultar botones de ataque del personaje
+      document.getElementsByClassName("ataqueButton")[0].style.display = "none";
+      document.getElementsByClassName("ataqueButton")[1].style.display = "none";
+      document.getElementsByClassName("ataqueButton")[2].style.display = "none";
+      document.getElementById("personaje").style.display = "none";
+      document.getElementsByClassName("defensaButton")[0].style.display = "inline-block";
+      document.getElementsByClassName("defensaButton")[1].style.display = "inline-block";
+      document.getElementsByClassName("defensaButton")[2].style.display = "inline-block";
+      document.getElementById("botonesDefensa").style.display =  "inline-block";
+
+
+      // Seleccionar un ataque y defensa aleatorios para el enemigo
+      var ataques = ["agua", "fuego", "rayo"];
+      var defensas = ["escudoAgua", "escudoFuego", "escudoRayo"];
+      var ataqueEnemigo = ataques[Math.floor(Math.random() * ataques.length)];
+      var defensaEnemigo = defensas[Math.floor(Math.random() * defensas.length)];
+
+      //atacarEnemigo(ataqueEnemigo, defensaEnemigo);
+    }
+
+    function atacar(tipoAtaque) {
+      // Seleccionar una defensa aleatoria para el enemigo
+      var defensas = ["escudoAgua", "escudoFuego", "escudoRayo"];
+      var defensaEnemigo = defensas[Math.floor(Math.random() * defensas.length)];
+      atacarPersonaje(tipoAtaque, defensaEnemigo);
+    }
+
+    function atacarPersonaje(tipoAtaque, tipoDefensa) {
+      // Calcular el daño, restar vida al enemigo y mostrar mensajes
+      var dano = calcularDano(tipoAtaque, tipoDefensa);
+      vidaEnemigo -= dano;
+
+      mostrarMensaje("Personaje Principal atacó con " + tipoAtaque + ", Enemigo se defendió con " + tipoDefensa + ", quitando " + dano + " de vida al Enemigo.");
+      mostrarVida();
+
+      if (vidaEnemigo <= 0) {
+        mostrarMensaje("¡Has ganado!");
+        reiniciarJuego();
+      } else {
+        turnoEnemigo();
+      }
+    }
+
+    function atacarEnemigo(tipoAtaque, tipoDefensa) {
+      // Seleccionar una defensa aleatoria para el personaje
+      var defensas = ["escudoAgua", "escudoFuego", "escudoRayo"];
+      var defensaPersonaje = defensas[Math.floor(Math.random() * defensas.length)];
+      var dano = calcularDano(tipoAtaque, tipoDefensa);
+      vidaPersonaje -= dano;
+
+      mostrarMensaje("Enemigo atacó con " + tipoAtaque + ", Personaje Principal se defendió con " + tipoDefensa + ", quitando " + dano + " de vida al Personaje Principal.");
+      mostrarVida();
+
+      if (vidaPersonaje <= 0) {
+        mostrarMensaje("¡Has perdido!");
+        reiniciarJuego();
+      } else {
+        turnoPersonaje();
+      }
+    }
+
+    function defender(tipoDefensa) {
+      // Seleccionar un ataque aleatorio para el enemigo
+      var ataques = ["agua", "fuego", "rayo"];
+      var ataqueEnemigo = ataques[Math.floor(Math.random() * ataques.length)];
+      atacarEnemigo(ataqueEnemigo, tipoDefensa);
+    }
+
+    function calcularDano(tipoAtaque, tipoDefensa) {
+      // Calcular el daño basado en los tipos de ataque y defensa
+      if ((tipoAtaque === "agua" && tipoDefensa === "escudoAgua") ||
+          (tipoAtaque === "fuego" && tipoDefensa === "escudoFuego") ||
+          (tipoAtaque === "rayo" && tipoDefensa === "escudoRayo")) {
+        return 10;
+      } else if ((tipoAtaque === "fuego" && tipoDefensa === "escudoRayo") ||
+                 (tipoAtaque === "rayo" && tipoDefensa === "escudoAgua") ||
+                 (tipoAtaque === "agua" && tipoDefensa === "escudoFuego")) {
+        return 20;
+      } else {
+        return 0;
+      }
+    }
+
+    function mostrarMensaje(mensaje) {
+      // Mostrar un mensaje en el elemento de mensaje
+      document.getElementById("mensaje").innerHTML = mensaje;
+    }
+
+    function mostrarVida() {
+      // Actualizar la vida mostrada del personaje y enemigo
+      document.getElementById("vidaPersonaje").innerHTML = "Vida Personaje: " + vidaPersonaje;
+      document.getElementById("vidaEnemigo").innerHTML = "Vida Enemigo: " + vidaEnemigo;
+    }
+
+    function reiniciarJuego() {
+      // Reiniciar los valores y mostrar el bloque de inicio
+      vidaPersonaje = 100;
+      vidaEnemigo = 100;
+      turnoPersonaje();
+      mostrarVida();
+      document.getElementById("inicio").style.display = "block";
+      document.getElementById("juego").style.display = "none";
+      mostrarMensaje("");
+    }
+  </script>
+</body>
+</html>
