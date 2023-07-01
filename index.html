@@ -112,7 +112,7 @@
 
       if (vidaEnemigo <= 0) {
         mostrarMensaje("¡Has ganado!");
-        reiniciarJuego();
+        setTimeout(reiniciarJuego,5000);
       } else {
         turnoEnemigo();
       }
@@ -130,7 +130,7 @@
 
       if (vidaPersonaje <= 0) {
         mostrarMensaje("¡Has perdido!");
-        reiniciarJuego();
+        setTimeout(reiniciarJuego,5000);
       } else {
         turnoPersonaje();
       }
@@ -168,6 +168,7 @@
       document.getElementById("vidaPersonaje").innerHTML = "Vida Personaje: " + vidaPersonaje;
       document.getElementById("vidaEnemigo").innerHTML = "Vida Enemigo: " + vidaEnemigo;
     }
+
 
     function reiniciarJuego() {
       // Reiniciar los valores y mostrar el bloque de inicio
